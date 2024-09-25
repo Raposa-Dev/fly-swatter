@@ -4,32 +4,30 @@ let squareSize;
 let score = 0;
 let isGameRunning = false;
 let gameInterval;
-let squares = []; 
+let squares = [];
 
 const squareImage = new Image();
-squareImage.src = './images/fly.png'; 
+squareImage.src = './images/fly.png';
 
 const backgroundImage = new Image();
-backgroundImage.src = './images/table.png'; 
-const killSound = new Audio('./audios/hard-slap.mp3'); 
+backgroundImage.src = './images/table.png';
+const killSound = new Audio('./audios/hard-slap.mp3');
 const appearSound = new Audio('./audios/flay.mp3');
 
-
 function playKillSound() {
-    killSound.currentTime = 0;  
+    killSound.currentTime = 0;
     killSound.play();
-    stopAppearSound()
+    stopAppearSound();
 }
 
 function stopAppearSound() {
-    appearSound.stop() 
+    appearSound.pause();  // Para o som
+    appearSound.currentTime = 0;  // Reinicia o som
 }
 
-
-function playAppearSound() {  
+function playAppearSound() {
     appearSound.play();
 }
-
 
 function initGame() {
     setupCanvas();
@@ -41,17 +39,15 @@ function initGame() {
 }
 
 function setupCanvas() {
-    // Ajustar o canvas para o tamanho da tela
     canvas.width = window.innerWidth * 0.9; // 90% da largura da tela
     canvas.height = window.innerHeight * 0.7; // 70% da altura da tela
-    
-    // Tornar o tamanho do quadrado (mosca) proporcional ao tamanho do canvas
+
     squareSize = Math.min(canvas.width, canvas.height) * 0.1; // 10% do menor valor entre largura e altura
 }
 
 function drawSquares() {
     clearCanvas();
-    drawBackground(); 
+    drawBackground();
     squares.forEach(square => {
         ctx.drawImage(squareImage, square.x, square.y, squareSize, squareSize);
     });
@@ -74,13 +70,12 @@ function createNewSquare() {
     const squareX = Math.random() * (canvas.width - squareSize);
     const squareY = Math.random() * (canvas.height - squareSize);
     squares.push({ x: squareX, y: squareY });
+    playAppearSound(); // Toca o som da mosca quando ela aparece
     drawSquares();
 }
 
 function setupTouchHandler() {
-    // Detecta toque na tela e mapeia para coordenadas do canvas
     canvas.addEventListener('touchstart', handleCanvasTouch);
-    
 }
 
 function handleCanvasTouch(event) {
@@ -93,7 +88,7 @@ function handleCanvasTouch(event) {
     squares = squares.filter(square => {
         if (isSquareClicked(square, touchX, touchY)) {
             updateScore();
-            return false; 
+            return false;
         }
         return true;
     });
@@ -124,7 +119,7 @@ function drawScore() {
 function setupStartPauseButton() {
     const button = document.getElementById('startPauseButton');
     button.addEventListener('click', toggleGame);
-    stopAppearSound()
+    stopAppearSound();
 }
 
 function toggleGame() {
@@ -138,12 +133,14 @@ function toggleGame() {
 function startGame() {
     isGameRunning = true;
     gameInterval = setInterval(createNewSquare, 2000);
+    playAppearSound(); // Começa a tocar o som de aparecimento
     updateButtonLabel();
 }
 
 function pauseGame() {
     isGameRunning = false;
     clearInterval(gameInterval);
+    stopAppearSound(); // Para o som ao pausar o jogo
     updateButtonLabel();
 }
 

@@ -155,7 +155,7 @@ function playKillSound() {
 }
 
 function stopAppearSound() {
-    appearSound.stop() 
+    appearSound.pause() 
 }
 
 
