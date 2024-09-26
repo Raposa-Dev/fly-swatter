@@ -21,8 +21,7 @@ function playKillSound() {
 }
 
 function stopAppearSound() {
-    appearSound.pause();  // Para o som
-    appearSound.currentTime = 0;  // Reinicia o som
+    appearSound.pause();
 }
 
 function playAppearSound() {
@@ -133,7 +132,7 @@ function toggleGame() {
 function startGame() {
     isGameRunning = true;
     gameInterval = setInterval(createNewSquare, 2000);
-    playAppearSound(); // Começa a tocar o som de aparecimento
+    playAppearSound();
     updateButtonLabel();
 }
 
